@@ -1,10 +1,12 @@
-import './Home.css';
+import React from "react";
+import Hero from "../components/Hero/Hero";
+import Features from "../components/Features/Features";
 
-export default function Home() {
+export default function Main() {
   return (
-    <div className="home">
-      <h1>Bienvenue !</h1>
-      <p>Ceci est la page d’accueil de l’application React.</p>
-    </div>
+    <main className="main">
+      <Hero />
+      <Features />
+    </main>
   );
 }
