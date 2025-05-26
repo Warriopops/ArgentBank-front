@@ -1,6 +1,10 @@
 .feature-item {
     flex: 1;
     padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
 }
 
 .feature-icon {
