@@ -1,6 +1,6 @@
 .bg-dark{
     display: flex;
-}
+    flex-direction: column;}
 .sign-in-button {
     display: block;
     width: 100%;
