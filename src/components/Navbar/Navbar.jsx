@@ -1,10 +1,19 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar() {
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    const userName = localStorage.getItem("userName");
+
+    const handleSignOut = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        navigate("/sign-in");
+    };
+
     return (
         <nav className="main-nav">
             <Link className="main-nav-logo" to="/">
@@ -15,10 +24,21 @@ export default function Navbar() {
                 />
             </Link>
             <div>
-                <Link className="main-nav-item" to="/sign-in">
-                    <FontAwesomeIcon icon={faUserCircle} /> Sign In
-                </Link>
+                {token ? (
+                    <>
+                        <Link className="main-nav-item" to="/user">
+                            <FontAwesomeIcon icon={faUserCircle} /> {userName}
+                        </Link>
+                        <button className="main-nav-item " onClick={handleSignOut}>
+                            <FontAwesomeIcon icon={faSignOutAlt} /> Sign Out
+                        </button>
+                    </>
+                ) : (
+                    <Link className="main-nav-item" to="/sign-in">
+                        <FontAwesomeIcon icon={faUserCircle} /> Sign In
+                    </Link>
+                )}
             </div>
         </nav>
-    )
+    );
 }
