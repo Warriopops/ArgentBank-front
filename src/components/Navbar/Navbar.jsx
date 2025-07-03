@@ -2,15 +2,18 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 
 export default function Navbar() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
-    const userName = localStorage.getItem("userName");
+    const userName = useSelector(state => {
+        console.log("Redux state:", state);
+        return state.userReducer.userName;
+    });
 
     const handleSignOut = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("userName");
         navigate("/sign-in");
     };
 
@@ -27,9 +30,9 @@ export default function Navbar() {
                 {token ? (
                     <>
                         <Link className="main-nav-item" to="/user">
-                            <FontAwesomeIcon icon={faUserCircle} /> {userName}
+                            <FontAwesomeIcon icon={faUserCircle} /> {userName || "Utilisateur"}
                         </Link>
-                        <button className="main-nav-item " onClick={handleSignOut}>
+                        <button className="main-nav-item" onClick={handleSignOut}>
                             <FontAwesomeIcon icon={faSignOutAlt} /> Sign Out
                         </button>
                     </>

@@ -1,52 +1,31 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateProfile } from '../../actions/user.action';
 
 const EditUsernameForm = ({ currentUsername, onCancel, onSave }) => {
     const [newUsername, setNewUsername] = useState(currentUsername);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+
     const token = localStorage.getItem("token");
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
-
         if (newUsername.trim().length < 2) {
             setError('Le nom doit contenir au moins 2 caractères.');
             return;
         }
-
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ userName: newUsername }),
-            });
-
-            if (!response.ok) {
-                let errorMessage = 'Erreur lors de la mise à jour';
-                try {
-                    const errData = await response.json();
-                    errorMessage = errData.message || errorMessage;
-                } catch {
-                }
-                throw new Error(errorMessage);
-            }
-
-            const contentType = response.headers.get('content-type');
-            let data = null;
-            if (contentType && contentType.includes('application/json')) {
-                data = await response.json();
+            const resultAction = await dispatch(updateProfile({ token, userName: newUsername }));
+            if (updateProfile.fulfilled.match(resultAction)) {
+                onSave(newUsername);
             } else {
-                data = null;
+                const errorMsg = resultAction.payload || resultAction.error.message || 'Erreur lors de la mise à jour';
+                setError(errorMsg);
             }
-
-            console.log('Update success:', data);
-
-            onSave(newUsername);
-            
         } catch (err) {
             setError(err.message);
         } finally {
