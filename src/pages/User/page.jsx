@@ -29,7 +29,6 @@ const User = () => {
           />
         )}
       </div>
-
       <h2 className="sr-only">Accounts</h2>
       {accountsData.map((account, index) => (
         <section className="account" key={index}>
