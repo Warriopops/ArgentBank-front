@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './User.css';
 import EditUsernameForm from '../../components/EditUsername/EditUsername';
 import { useSelector } from 'react-redux';
+import accountsData from '../../data/account.json';
 
 const User = () => {
   const userName = useSelector(state => state.userReducer.userName);
@@ -30,23 +31,7 @@ const User = () => {
       </div>
 
       <h2 className="sr-only">Accounts</h2>
-      {[
-        {
-          title: 'Argent Bank Checking (x8349)',
-          amount: '$2,082.79',
-          description: 'Available Balance'
-        },
-        {
-          title: 'Argent Bank Savings (x6712)',
-          amount: '$10,928.42',
-          description: 'Available Balance'
-        },
-        {
-          title: 'Argent Bank Credit Card (x8349)',
-          amount: '$184.30',
-          description: 'Current Balance'
-        }
-      ].map((account, index) => (
+      {accountsData.map((account, index) => (
         <section className="account" key={index}>
           <div className="account-content-wrapper">
             <h3 className="account-title">{account.title}</h3>
