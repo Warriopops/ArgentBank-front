@@ -2,53 +2,29 @@ import './Sign-in.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
+import { login } from "../../actions/login.action"; 
+import { useDispatch } from 'react-redux';
+
 
 function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const dispatch = useDispatch();
 
-const handleSubmit = async (e) => {
-  e.preventDefault()
-  setError('')
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
-  try {
-    const response = await fetch('http://localhost:3001/api/v1/user/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
-
-    const data = await response.json()
-
-    if (response.ok) {
-      const token = data.body.token
-      localStorage.setItem('token', token)
-      const profileResponse = await fetch('http://localhost:3001/api/v1/user/profile', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-
-      const profileData = await profileResponse.json()
-
-      if (profileResponse.ok) {
-        localStorage.setItem('userName', profileData.body.firstName)
-        window.location.href = '/user'
-      } else {
-        setError(profileData.message || 'Failed to fetch user profile')
-      }
-    } else {
-      setError(data.message || 'Login failed')
+    try {
+      await dispatch(login({ email, password })).unwrap();
+      window.location.href = "/user"; 
+    } catch (err) {
+        setError(err.message || String(err));
     }
-  } catch (err) {
-    console.error('Erreur fetch:', err)
-    setError('Erreur réseau ou serveur indisponible')
-  }
-}
+  };
+
+
 
   return (
     <main className="main-login">
@@ -58,7 +34,7 @@ const handleSubmit = async (e) => {
           <h1>Sign In</h1>
           <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Username</label>
               <input
                 type="email"
                 id="email"

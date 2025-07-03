@@ -1,15 +1,47 @@
+import React, { useState } from 'react';
 import './User.css';
+import EditUsernameForm from '../../components/EditUsername/EditUsername';
 
 const User = () => {
+  const userName = localStorage.getItem("userName");
+  const [username, setUsername] = useState(userName ? userName : "");
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
+  const handleSaveUsername = (newUsername) => {
+    setUsername(newUsername);
+    setIsEditing(false);
+  };
+
   return (
     <>
       <main className="main bg-dark">
         <div className="header">
-          <h1>
-            Welcome back<br />
-            Tony Jarvis!
-          </h1>
-          <button className="edit-button">Edit Name</button>
+          {!isEditing ? (
+            <>
+              <h1>
+                Welcome back
+                <br />
+                {username}!
+              </h1>
+              <button className="edit-button" onClick={handleEditClick}>
+                Edit Name
+              </button>
+            </>
+          ) : (
+            <EditUsernameForm
+              currentUsername={username}
+              onCancel={handleCancelEdit}
+              onSave={handleSaveUsername}
+            />
+          )}
         </div>
 
         <h2 className="sr-only">Accounts</h2>
