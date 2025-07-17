@@ -14,7 +14,7 @@ export default function Navbar() {
 
     const handleSignOut = () => {
         localStorage.removeItem("token");
-        navigate("/sign-in");
+        navigate("/");
     };
 
     return (
