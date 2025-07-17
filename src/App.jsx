@@ -11,7 +11,6 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/sign-in" replace />;
 };
 
-
 function App() {
   return (
     <Provider store={store}>
